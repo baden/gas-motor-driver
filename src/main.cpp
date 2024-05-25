@@ -25,13 +25,27 @@
 #include <Arduino.h>
 
 #include <SoftwareSerial.h>
+#include <Servo.h>
 
-SoftwareSerial rxSerial(10, 11); // RX, TX
+
+#define SERVO_PIN 9
+#define RX_PIN 10
+#define TX_PIN 11
+
+#define ACC_PIN 2
+#define STARTER_PIN 3
+#define DECOMPRESSOR_PIN 4
+
+
+Servo myservo;  // create servo object to control a servo
+
+SoftwareSerial rxSerial(RX_PIN, TX_PIN); // RX, TX
 
 // the setup function runs once when you press reset or power the board
 void setup() {
   // initialize digital pin LED_BUILTIN as an output.
     pinMode(LED_BUILTIN, OUTPUT);
+    myservo.attach(SERVO_PIN);  // attaches the servo on pin 9 to the servo object
     rxSerial.begin(19200);
     Serial.begin(115200);
 }
@@ -134,7 +148,14 @@ void crsf_parse_payload(uint8_t *payload, uint8_t len) {
         ledState = !ledState;
     }
         digitalWrite(LED_BUILTIN, ledState);
-        Serial.println(channel[2]);
+
+    int servoPos = map(channel[2], 000, 2000, 0, 180);
+
+    Serial.print(servoPos);
+    Serial.print(" ");
+    Serial.println(channel[2]);
+
+    myservo.write(servoPos);              // tell servo to go to position in variable 'pos'
 }
 
 void rxParseByte(uint8_t c) {

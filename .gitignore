@@ -6,3 +6,5 @@
 board/gas-motor-driver/gas-motor-driver-backups/*
 board/gas-motor-driver/*.lck
 board/gas-motor-driver/fp-info-cache
+board/gas-motor-driver/#auto_saved_files#
+board/gas-motor-driver/_autosave-gas-motor-driver.kicad_sch
