@@ -24,13 +24,26 @@
 
 #include <Arduino.h>
 
+// #define USE_ALT_SERIAL
+
+// #include <AltSoftSerial.h>
+
+#if defined(USE_ALT_SERIAL)
+#include "AltSoftSerial.h"
+#else
 #include <SoftwareSerial.h>
-#include <Servo.h>
+#endif
+
+// #include <Servo.h>
+#include <Servo2.h>
 
 
 #define SERVO_PIN 9
-#define RX_PIN 10
-#define TX_PIN 11
+// #define RX_PIN 10
+// #define TX_PIN 11
+
+#define RX_PIN 8
+#define TX_PIN 10
 
 #define ACC_PIN 2
 #define STARTER_PIN 3
@@ -39,7 +52,12 @@
 
 Servo myservo;  // create servo object to control a servo
 
+#if defined(USE_ALT_SERIAL)
+// SoftwareSerial rxSerial(RX_PIN, TX_PIN); // RX, TX
+AltSoftSerial rxSerial;
+#else
 SoftwareSerial rxSerial(RX_PIN, TX_PIN); // RX, TX
+#endif
 
 // the setup function runs once when you press reset or power the board
 void setup() {
