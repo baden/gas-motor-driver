@@ -63,6 +63,20 @@ SoftwareSerial rxSerial(RX_PIN, TX_PIN); // RX, TX
 void setup() {
   // initialize digital pin LED_BUILTIN as an output.
     pinMode(LED_BUILTIN, OUTPUT);
+
+    pinMode(ACC_PIN, OUTPUT);
+    // Set ACC pin to LOW
+    digitalWrite(ACC_PIN, LOW);
+    // Set STARTER pin as output
+    pinMode(STARTER_PIN, OUTPUT);
+    // Set STARTER pin to LOW
+    digitalWrite(STARTER_PIN, LOW);
+    // Set DECOMPRESSOR pin as output
+    pinMode(DECOMPRESSOR_PIN, OUTPUT);
+    // Set DECOMPRESSOR pin to LOW
+    digitalWrite(DECOMPRESSOR_PIN, LOW);
+
+
     myservo.attach(SERVO_PIN);  // attaches the servo on pin 9 to the servo object
     rxSerial.begin(19200);
     Serial.begin(115200);
@@ -169,9 +183,51 @@ void crsf_parse_payload(uint8_t *payload, uint8_t len) {
 
     int servoPos = map(channel[2], 000, 2000, 0, 180);
 
-    Serial.print(servoPos);
-    Serial.print(" ");
-    Serial.println(channel[2]);
+    // Serial.print(servoPos);
+    // Serial.print(" ");
+    // Serial.println(channel[2]);
+
+    Serial.print("  #1: "); Serial.print(channel[0]);
+    Serial.print("  #2: "); Serial.print(channel[1]);
+    Serial.print("  #3: "); Serial.print(channel[2]);
+    Serial.print("  #4: "); Serial.print(channel[3]);
+    Serial.print("  #5: "); Serial.print(channel[4]);
+    Serial.print("  #6: "); Serial.print(channel[5]);
+    Serial.print("  #7: "); Serial.print(channel[6]);
+    Serial.print("  #8: "); Serial.print(channel[7]);
+    Serial.print("  #9: "); Serial.print(channel[8]);
+    Serial.print("  #10: "); Serial.print(channel[9]);
+    Serial.print("  #11: "); Serial.print(channel[10]);
+    Serial.print("  #12: "); Serial.print(channel[11]);
+    Serial.print("  #13: "); Serial.print(channel[12]);
+    Serial.print("  #14: "); Serial.print(channel[13]);
+    Serial.print("  #15: "); Serial.print(channel[14]);
+    Serial.print("  #16: "); Serial.println(channel[15]);
+
+
+    #if 1
+    if(channel[11 -1] > 1500) {
+        digitalWrite(ACC_PIN, HIGH);
+        // Serial.print("ACC_PIN HIGH");
+    } else {
+        digitalWrite(ACC_PIN, LOW);
+        // Serial.print("ACC_PIN LOW");
+    }
+    if(channel[10 -1] > 1500) {
+        digitalWrite(STARTER_PIN, HIGH);
+        // Serial.print("   STARTER_PIN HIGH");
+    } else {
+        digitalWrite(STARTER_PIN, LOW);
+        // Serial.print("   STARTER_PIN LOW");
+    }
+    if(channel[9 -1] > 1500) {
+        digitalWrite(DECOMPRESSOR_PIN, HIGH);
+        // Serial.println("   DECOMPRESSOR_PIN HIGH");
+    } else {
+        digitalWrite(DECOMPRESSOR_PIN, LOW);
+        // Serial.println("   DECOMPRESSOR_PIN LOW");
+    }
+    #endif
 
     myservo.write(servoPos);              // tell servo to go to position in variable 'pos'
 }
@@ -227,6 +283,8 @@ void loop() {
 //   delay(1000);                      // wait for a second
 //   digitalWrite(LED_BUILTIN, LOW);   // turn the LED off by making the voltage LOW
 //   delay(100);                      // wait for a second
+    // Set ACC pin as output
+
     
     if (rxSerial.available()) {
         //  Serial.write(mySerial.read());
